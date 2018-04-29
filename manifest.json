@@ -1,0 +1,28 @@
+{
+
+  "manifest_version": 2,
+  "name": "Gmail Label Organizer",
+  "version": "1.0",
+
+  "description": "Allows users to reorganize the Gmail system labels, i.e. to put the 'Important' label above 'Inbox'.",
+
+  "applications": {
+    "gecko": {
+      "id": "{b7553286-a309-4899-b5ed-97c005ab703b}"
+    }
+  },
+
+  "permissions": ["storage"],
+
+  "icons": {
+    "48": "icons/gmail.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://mail.google.com/*"],
+      "js": ["organizer.js"]
+    }
+  ]
+
+}
