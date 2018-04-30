@@ -1,0 +1,9 @@
+{
+  "name": "labelOrder",
+  "description": "ignored",
+  "type": "storage",
+  "data":
+  {
+    "color": "management thinks it should be blue!"
+  }
+}
