@@ -1,7 +1,6 @@
-var storageItem = browser.storage.managed.get('color');
+var storageItem = browser.storage.sync.get('color');
 storageItem.then((res) => {
-  document.body.style.border = `5px solid ${res.color}`;
-  console.log("Color: " + res.color);
+  document.body.style.border = "5px solid " + res.color;
 });
 
 // TODO: Make the labels draggable and the HTML changes reflect it
