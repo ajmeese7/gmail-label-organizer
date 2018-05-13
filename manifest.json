@@ -18,10 +18,14 @@
     "browser_style": true,
     "default_icon": {
       "16": "icons/gmail.png"
-    }
+    },
+    "default_popup": "popup.html"
   },
 
-  "permissions": ["storage"],
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
 
   "icons": {
     "48": "icons/gmail.png"

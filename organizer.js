@@ -1,16 +1,27 @@
-var storageItem = browser.storage.sync.get('color');
-storageItem.then((res) => {
-  document.body.style.border = "5px solid " + res.color;
-});
+labels();
 
-// TODO: Make the labels draggable and the HTML changes reflect it
-//       Make the add-on remember user customization
-//       Remove a label's data when the label is no longer available
+function labels() {
+  var systemLabels = document.getElementsByClassName("TK")[0];
+  if (typeof systemLabels != 'undefined') {
+    // This is to save the default Gmail inbox code to reset
+    var default = browser.storage.sync.get('default');
+    if (typeof default == 'undefined') {
+      browser.storage.sync.set({
+        default: systemLabels
+      });
+    }
 
-var systemLabels = document.getElementsByClassName("TK")[0];
-console.log(systemLabels);
+    console.log(systemLabels);
 
-
-// IDEA: Convert discovered labels into an array and switch the code? Complies with:
-//       https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/storage
-//       Use storage?
+    // Draggable mini menu that changes the order of the page then refreshes (pastes code w/ innerHTML)
+    var children = systemLabels.children;
+    var childArray;
+    for (var i = 0; i < children.length; i++) {
+      // Lists all the direct container divs for the system labels
+      console.log(children[i].children[0].children[0]);
+    }
+  } else {
+    // Calls until the content is loaded
+    setTimeout(labels, 100);
+  }
+}

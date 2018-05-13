@@ -4,6 +4,6 @@
   "type": "storage",
   "data":
   {
-    "color": "management thinks it should be blue!"
+    "order": "the default Gmail label order"
   }
 }
