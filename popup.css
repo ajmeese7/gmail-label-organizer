@@ -6,6 +6,10 @@ html, body {
   display: none;
 }
 
+#not-gmail, #error-content {
+  margin-left: 5px;
+}
+
 .button {
   margin: 3% auto;
   padding: 4px;
@@ -14,11 +18,11 @@ html, body {
   cursor: pointer;
 }
 
-.beast:hover {
+.change:hover {
   background-color: #CFF2F2;
 }
 
-.beast {
+.change {
   background-color: #E5F2F2;
 }
 

@@ -1,5 +1,5 @@
 function logTabs(tabs) {
-  let tab = tabs[0]; // Safe to assume there will only be one result
+  let tab = tabs[0];
   var title = tab.title;
   if (title.includes("Gmail")) {
     document.querySelector("#not-gmail").classList.add("hidden");
@@ -49,8 +49,12 @@ function listenForClicks() {
  */
 function reportExecuteScriptError(error) {
   document.querySelector("#popup-content").classList.add("hidden");
+  document.querySelector("#not-gmail").classList.add("hidden");
   document.querySelector("#error-content").classList.remove("hidden");
-  console.error(`Failed to execute content script: ${error.message}`);
+
+  var message = `Failed to execute content script: ${error.message}`;
+  document.querySelector("#error-content").innerHTML = "<p>" + message + "</p>";
+  console.error(message);
 }
 
 /**

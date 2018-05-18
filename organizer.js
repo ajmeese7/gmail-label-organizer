@@ -3,15 +3,17 @@ labels();
 function labels() {
   var systemLabels = document.getElementsByClassName("TK")[0];
   if (typeof systemLabels != 'undefined') {
-    // This is to save the default Gmail inbox code to reset
-    var default = browser.storage.sync.get('default');
-    if (typeof default == 'undefined') {
-      browser.storage.sync.set({
-        default: systemLabels
-      });
-    }
+    // This is to save the default Gmail inbox code for reset()
+    browser.storage.sync.set({
+      default: systemLabels.innerHTML
+    });
 
-    console.log(systemLabels);
+    var storageItem = browser.storage.sync.get('default');
+    storageItem.then((res) => {
+      console.log(res.default);
+      document.querySelector("#popup-content").innerHTML = res.default;
+      console.log("setContent() called!");
+    });
 
     // Draggable mini menu that changes the order of the page then refreshes (pastes code w/ innerHTML)
     var children = systemLabels.children;
