@@ -31,25 +31,38 @@ function listenForClicks() {
       console.error(`An error occured: ${error}`);
     }
 
-    /**
-     * Remove the page-hiding CSS from the active tab,
-     * send a "reset" message to the content script in the active tab.
-     */
+    // Running in popup
+    if (e.target.classList.contains("reset")) {
+      // TODO: Add a handler for when the object clicked doesn't have a class?
+      var storageItem = browser.storage.sync.get('default');
+      storageItem.then((res) => {
+        document.querySelector("#popup-content").innerHTML += res.default;
+
+        console.log("DEFAULT:");
+        console.log(res.default);
+      });
+
+      browser.tabs.query({active: true, currentWindow: true})
+       .then(reset)
+       .catch(reportError);
+    } else if (e.target.classList.contains("change")) {
+      browser.tabs.query({active: true, currentWindow: true})
+       .then(change)
+       .catch(reportError);
+    }
+
+    // Sends a "reset" message to the content script in the active tab.
     function reset(tabs) {
       browser.tabs.sendMessage(tabs[0].id, {
         command: "reset",
       });
     }
 
-    /**
-     * Get the active tab,
-     * then call "reset()" as appropriate.
-     */
-     if (e.target.classList.contains("reset")) {
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(reset)
-        .catch(reportError);
-     }
+    function change(tabs) {
+      browser.tabs.sendMessage(tabs[0].id, {
+        command: "change",
+      });
+    }
   });
 }
 
