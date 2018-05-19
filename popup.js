@@ -11,7 +11,7 @@ function logTabs(tabs) {
 }
 
 function onError(err){
-  console.error(err);
+  console.error("logTabs error: " + err);
 }
 
 browser.tabs.query({currentWindow: true, active: true}).then(logTabs, onError);
@@ -32,6 +32,16 @@ function listenForClicks() {
     }
 
     /**
+     * Remove the page-hiding CSS from the active tab,
+     * send a "reset" message to the content script in the active tab.
+     */
+    function reset(tabs) {
+      browser.tabs.sendMessage(tabs[0].id, {
+        command: "reset",
+      });
+    }
+
+    /**
      * Get the active tab,
      * then call "reset()" as appropriate.
      */
@@ -39,7 +49,7 @@ function listenForClicks() {
       browser.tabs.query({active: true, currentWindow: true})
         .then(reset)
         .catch(reportError);
-    }
+     }
   });
 }
 

@@ -14,13 +14,17 @@
   }
 
   function reset() {
+    console.log("Top of reset");
     // SHOULD only be running on Gmail page, so the object should be able to be retrieved.
     // TODO: Set to do this from within labels to make sure the object is loaded?
     var storageItem = browser.storage.sync.get('default');
     storageItem.then((res) => {
+      console.log("HI I'M BIG GAY");
       // TODO: Set this to replace the object itself, not the inner code,
       //       with the default stored object.
-      document.getElementsByClassName("TK")[0].innerHTML = res.default;
+      //document.getElementsByClassName("TK")[0].innerHTML = res.default;
+      console.log(res.default);
+      console.log("Bottom of reset");
     });
   }
 
@@ -30,7 +34,11 @@
   */
   browser.runtime.onMessage.addListener((message) => {
     if (message.command === "reset") {
+      console.log("Reset command handler!");
       reset();
+      console.log("After reset call!");
+    } else {
+      console.log("Message not defined!");
     }
   });
 
