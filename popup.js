@@ -39,7 +39,6 @@ function listenForClicks() {
         storageItem.then((res) => {
           document.querySelector("#popup-content").innerHTML += res.default;
 
-          console.log("DEFAULT:");
           console.log(res.default);
         });
 
@@ -47,6 +46,16 @@ function listenForClicks() {
          .then(reset)
          .catch(reportError);
       } else if (e.target.classList.contains("change")) {
+        var storageItem = browser.storage.sync.get('custom');
+        storageItem.then((res) => {
+          console.log(res.custom.length);
+
+          var content = document.querySelector("#popup-content");
+          for (var i = res.custom.length - 1; i >= 0; i--) {
+            content.insertBefore(res.custom[i], content.firstChild);
+          }
+        });
+
         browser.tabs.query({active: true, currentWindow: true})
          .then(change)
          .catch(reportError);

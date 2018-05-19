@@ -10,9 +10,9 @@
   }
 
   function change() {
-    var storageItem = browser.storage.sync.get('default');
+    var storageItem = browser.storage.sync.get('custom');
     storageItem.then((res) => {
-      //document.getElementsByClassName("TK")[0].innerHTML = res.default;
+      //document.getElementsByClassName("TK")[0].innerHTML = res.custom;
     });
   }
 
