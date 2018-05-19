@@ -1,6 +1,7 @@
 function logTabs(tabs) {
   let tab = tabs[0];
   var title = tab.title;
+  // Definitely not a perfect system, as it will run on any page with Gmail in the title
   if (title.includes("Gmail")) {
     document.querySelector("#not-gmail").classList.add("hidden");
     document.querySelector("#popup-content").classList.remove("hidden");
@@ -28,28 +29,29 @@ function listenForClicks() {
      * Just log the error to the console.
      */
     function reportError(error) {
-      console.error(`An error occured: ${error}`);
+      console.error(`A listenForClicks() error occured: ${error}`);
     }
 
     // Running in popup
-    if (e.target.classList.contains("reset")) {
-      // TODO: Add a handler for when the object clicked doesn't have a class?
-      var storageItem = browser.storage.sync.get('default');
-      storageItem.then((res) => {
-        document.querySelector("#popup-content").innerHTML += res.default;
+    try {
+      if (e.target.classList.contains("reset")) {
+        var storageItem = browser.storage.sync.get('default');
+        storageItem.then((res) => {
+          document.querySelector("#popup-content").innerHTML += res.default;
 
-        console.log("DEFAULT:");
-        console.log(res.default);
-      });
+          console.log("DEFAULT:");
+          console.log(res.default);
+        });
 
-      browser.tabs.query({active: true, currentWindow: true})
-       .then(reset)
-       .catch(reportError);
-    } else if (e.target.classList.contains("change")) {
-      browser.tabs.query({active: true, currentWindow: true})
-       .then(change)
-       .catch(reportError);
-    }
+        browser.tabs.query({active: true, currentWindow: true})
+         .then(reset)
+         .catch(reportError);
+      } else if (e.target.classList.contains("change")) {
+        browser.tabs.query({active: true, currentWindow: true})
+         .then(change)
+         .catch(reportError);
+      }
+    } catch(err) {}
 
     // Sends a "reset" message to the content script in the active tab.
     function reset(tabs) {
