@@ -11,6 +11,47 @@
       <p>Sorry, this should only be opened in Gmail.</p>
     </div>
     <div id="popup-content" class="hidden">
+      <div id="container">
+        <div id="1" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag1" draggable="true" ondragstart="drag(event)">Inbox</p>
+        </div>
+        <div id="2" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag2" draggable="true" ondragstart="drag(event)">Starred</p>
+        </div>
+        <div id="3" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag3" draggable="true" ondragstart="drag(event)">Snoozed</p>
+        </div>
+        <div id="4" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag4" draggable="true" ondragstart="drag(event)">Important</p>
+        </div>
+        <div id="5" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag5" draggable="true" ondragstart="drag(event)">Sent</p>
+        </div>
+        <div id="6" ondrop="drop(event)" ondragover="allowDrop(event)">
+          <p id="drag6" draggable="true" ondragstart="drag(event)">Drafts</p>
+        </div>
+      </div>
+
+      <script>
+        function allowDrop(ev) {
+          ev.preventDefault();
+        }
+
+        function drag(ev) {
+          ev.dataTransfer.setData("src", ev.target.id);
+        }
+
+        function drop(ev) {
+          ev.preventDefault();
+          var src = document.getElementById(ev.dataTransfer.getData("src"));
+          var srcParent = src.parentNode;
+          var tgt = ev.currentTarget.firstElementChild;
+
+          ev.currentTarget.replaceChild(src, tgt);
+          srcParent.appendChild(tgt);
+        }
+      </script>
+
       <div class="button change">Change</div>
       <div class="button reset">Reset</div>
     </div>
