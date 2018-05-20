@@ -12,6 +12,8 @@
   function change() {
     var storageItem = browser.storage.sync.get('custom');
     storageItem.then((res) => {
+      // TODO: Get the saved order from custom and rearrange the HTML
+      // in this part of the page acccordingly like in `organizer.js`
       //document.getElementsByClassName("TK")[0].innerHTML = res.custom;
     });
   }

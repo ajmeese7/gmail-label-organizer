@@ -17,6 +17,38 @@ function onError(err){
 
 browser.tabs.query({currentWindow: true, active: true}).then(logTabs, onError);
 
+//////////////////////////////////////////////////////////////
+var div = document.getElementsByClassName("dragDiv");
+var divDragFunction = function(ev) {
+  ev.preventDefault();
+}
+
+var divDropFunction = function(ev) {
+  ev.preventDefault();
+  var src = document.getElementById(ev.dataTransfer.getData("src"));
+  var srcParent = src.parentNode;
+  var tgt = ev.currentTarget.firstElementChild;
+
+  ev.currentTarget.replaceChild(src, tgt);
+  srcParent.appendChild(tgt);
+}
+
+for (var i = 0; i < div.length; i++) {
+  div[i].addEventListener('dragover', divDragFunction, false);
+  div[i].addEventListener('drop', divDropFunction, false);
+}
+
+//////////////////////////////////////////////////////////////
+var p = document.getElementsByClassName("dragP");
+var pDrag = function(ev) {
+  ev.dataTransfer.setData("src", ev.target.id);
+}
+
+for (var i = 0; i < div.length; i++) {
+  p[i].addEventListener('dragstart', pDrag, false);
+}
+//////////////////////////////////////////////////////////////
+
 
 /**
  * Listen for clicks on the buttons, and send the appropriate message to

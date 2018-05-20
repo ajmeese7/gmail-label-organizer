@@ -1,5 +1,5 @@
 html, body {
-  width: 200px;
+  width: 350px;
   background-color: white;
 }
 
@@ -7,8 +7,17 @@ html, body {
   display: none;
 }
 
-#not-gmail, #error-content {
+#not-gmail, #error-content, #popup-content {
   margin-left: 5px;
+}
+
+.dragDiv {
+  width: 75px;
+  height: 45px;
+  padding: 10px;
+  border: 1px solid black;
+  vertical-align: middle;
+  line-height: 1;
 }
 
 .button {
@@ -17,6 +26,8 @@ html, body {
   text-align: center;
   font-size: 1.5em;
   cursor: pointer;
+  width: 49%;
+  display: inline-block;
 }
 
 .change:hover {
