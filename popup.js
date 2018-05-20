@@ -1,3 +1,23 @@
+var storageItem = browser.storage.sync.get('default');
+storageItem.then((res) => {
+  if (typeof res.default == 'undefined') {
+    // This is to save the default Gmail inbox code for reset()
+    browser.storage.sync.set({
+      default: document.getElementById("container").innerHTML
+    });
+    console.log("Setting default!");
+  } else {
+    console.log("Sync item `default` already set!");
+  }
+});
+
+// Used as the default error handler throughout the file
+function error(err) {
+  console.error("error: " + err);
+}
+
+//////////////////////////////////////////////////////////////
+
 function logTabs(tabs) {
   let tab = tabs[0];
   var title = tab.title;
@@ -11,14 +31,25 @@ function logTabs(tabs) {
   }
 }
 
-function onError(err){
-  console.error("logTabs error: " + err);
-}
-
-browser.tabs.query({currentWindow: true, active: true}).then(logTabs, onError);
+browser.tabs.query({currentWindow: true, active: true}).then(logTabs, error);
 
 //////////////////////////////////////////////////////////////
-var div = document.getElementsByClassName("dragDiv");
+
+// Called every time popup is opened; sets listeners
+browser.storage.local.get('arrangement').then(setContent, error);
+
+function setContent(local) {
+  if (typeof local.arrangement != 'undefined') {
+    // Sets the popup content to contain user-configured arrangement
+    document.getElementById("container").innerHTML = local.arrangement;
+  } else {
+    console.log("Local item `arrangement` not yet set!");
+  }
+  setDivListeners();
+  setPListeners();
+}
+
+//////////////////////////////////////////////////////////////
 var divDragFunction = function(ev) {
   ev.preventDefault();
 }
@@ -31,22 +62,33 @@ var divDropFunction = function(ev) {
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
+
+  // Sets local storage with current arrangement to save it for when the popup is reopened
+  browser.storage.local.set({
+    arrangement: document.getElementById("container").innerHTML
+  });
 }
 
-for (var i = 0; i < div.length; i++) {
-  div[i].addEventListener('dragover', divDragFunction, false);
-  div[i].addEventListener('drop', divDropFunction, false);
+function setDivListeners() {
+  var div = document.getElementsByClassName("dragDiv");
+  for (var i = 0; i < div.length; i++) {
+    div[i].addEventListener('dragover', divDragFunction, false);
+    div[i].addEventListener('drop', divDropFunction, false);
+  }
 }
 
 //////////////////////////////////////////////////////////////
-var p = document.getElementsByClassName("dragP");
 var pDrag = function(ev) {
   ev.dataTransfer.setData("src", ev.target.id);
 }
 
-for (var i = 0; i < div.length; i++) {
-  p[i].addEventListener('dragstart', pDrag, false);
+function setPListeners() {
+  var p = document.getElementsByClassName("dragP");
+  for (var i = 0; i < p.length; i++) {
+    p[i].addEventListener('dragstart', pDrag, false);
+  }
 }
+
 //////////////////////////////////////////////////////////////
 
 
@@ -57,21 +99,23 @@ for (var i = 0; i < div.length; i++) {
 function listenForClicks() {
   document.addEventListener("click", (e) => {
 
-    /**
-     * Just log the error to the console.
-     */
-    function reportError(error) {
-      console.error(`A listenForClicks() error occured: ${error}`);
-    }
-
     // Running in popup
     try {
       if (e.target.classList.contains("reset")) {
         var storageItem = browser.storage.sync.get('default');
         storageItem.then((res) => {
-          document.querySelector("#popup-content").innerHTML += res.default;
+          document.getElementById("container").innerHTML = res.default;
+          browser.storage.local.set({
+            arrangement: document.getElementById("container").innerHTML
+          });
+        });
 
-          console.log(res.default);
+        setDivListeners();
+        setPListeners();
+
+        // TODO: This is not a good way! Store the numbers
+        browser.storage.sync.set({
+          order: document.getElementById("container").innerHTML
         });
 
         browser.tabs.query({active: true, currentWindow: true})
@@ -84,7 +128,7 @@ function listenForClicks() {
 
         browser.tabs.query({active: true, currentWindow: true})
          .then(change)
-         .catch(reportError);
+         .catch(error);
       }
     } catch(err) {}
 
