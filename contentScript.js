@@ -4,16 +4,27 @@
 
   }
 
-  function change() { // TODO: Also set!!!
+  function change() {
+    // TODO: Refesh somehow after reordered once to maintain order
+    // TODO: Make it refresh when innerHTML is modified (i.e. an email is deleted and the # is changed)
+    // so the new order is restored
     var storageItem = browser.storage.sync.get('order');
     storageItem.then((res) => {
-      // TODO: Get the saved order  and rearrange the HTML in
-      // this part of the page acccordingly like in `organizer.js`
-      //document.getElementsByClassName("TK")[0].innerHTML = ;
+      // Thank god for this guy: https://jsfiddle.net/jltorresm/1ukhzbg2/2/
+      var arr = res.order;
+      var wrapper = document.getElementsByClassName("TK")[0];
+      var children = wrapper.children;
+      var elements = document.createDocumentFragment();
 
-      // IDEA: Series of local.gets to retrieve the arrangement
-      // item's content, or store locally and preload?
-      // i.e. if (id == 6) { labelName = "Categories" }
+      arr.forEach(function(number) {
+      	elements.appendChild(children[number - 1].cloneNode(true));
+      });
+
+      console.log("Order array:");
+      console.log(arr);
+
+      wrapper.innerHTML = null;
+      wrapper.appendChild(elements);
     });
   }
 

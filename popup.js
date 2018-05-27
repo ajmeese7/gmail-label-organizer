@@ -125,8 +125,12 @@ function listenForClicks() {
         var children = document.getElementById("container").children;
         var childArray = [];
         for (var i = 0; i < children.length; i++) {
-          childArray.push(children[i].children[0].id);
+          var id = children[i].children[0].id;
+          childArray.push(parseInt(id));
         }
+
+        console.log("Order:");
+        console.log(childArray);
 
         browser.storage.sync.set({
           order: childArray
