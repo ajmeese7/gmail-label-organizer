@@ -110,20 +110,26 @@ function listenForClicks() {
           });
         });
 
+        // TODO: THIS ISN't WORKING! Popup listeners don't reset until popup is reopened
         setDivListeners();
         setPListeners();
 
-        // TODO: This is not a good way! Store the numbers
         browser.storage.sync.set({
-          order: document.getElementById("container").innerHTML
+          order: [1, 2, 3, 4, 5, 6]
         });
 
         browser.tabs.query({active: true, currentWindow: true})
          .then(reset)
          .catch(reportError);
       } else if (e.target.classList.contains("change")) {
+        var children = document.getElementById("container").children;
+        var childArray = [];
+        for (var i = 0; i < children.length; i++) {
+          childArray.push(children[i].children[0].id);
+        }
+
         browser.storage.sync.set({
-          //default:
+          order: childArray
         });
 
         browser.tabs.query({active: true, currentWindow: true})
