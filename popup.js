@@ -1,16 +1,3 @@
-var storageItem = browser.storage.sync.get('default');
-storageItem.then((res) => {
-  if (typeof res.default == 'undefined') {
-    // This is to save the default Gmail inbox code for reset()
-    browser.storage.sync.set({
-      default: document.getElementById("container").innerHTML
-    });
-    console.log("Setting default!");
-  } else {
-    console.log("Sync item `default` already set!");
-  }
-});
-
 // Used as the default error handler throughout the file
 function error(err) {
   console.error("error: " + err);
@@ -102,15 +89,20 @@ function listenForClicks() {
     // Running in popup
     try {
       if (e.target.classList.contains("reset")) {
-        var storageItem = browser.storage.sync.get('default');
-        storageItem.then((res) => {
-          document.getElementById("container").innerHTML = res.default;
-          browser.storage.local.set({
-            arrangement: document.getElementById("container").innerHTML
-          });
+        var labels = document.getElementsByClassName("dragP"); // From HTMLCollection to Array
+        var arr = Array.prototype.slice.call(labels);
+        labels = arr.sort(function(a, b) {
+          return a.id.localeCompare(b.id);
         });
 
-        // TODO: THIS ISN't WORKING! Popup listeners don't reset until popup is reopened
+        var divGroup = document.getElementsByClassName("dragDiv");
+        var divs = Array.prototype.slice.call(divGroup);
+        for (var i = 0; i < divs.length; i++) {
+          // TODO: Look for a way to simply paste the object, not this complicated mess.
+          //       The labels[] themselves are the correct objects
+          divs[i].innerHTML = "<p id='" + (i+1) + "' class='dragP' draggable='true'>" + labels[i].textContent + "</p>";
+        }
+
         setDivListeners();
         setPListeners();
 
@@ -118,9 +110,13 @@ function listenForClicks() {
           order: [1, 2, 3, 4, 5, 6]
         });
 
+        browser.storage.local.set({
+          arrangement: document.getElementById("container").innerHTML
+        });
+
         browser.tabs.query({active: true, currentWindow: true})
-         .then(reset)
-         .catch(reportError);
+         .then(modify)
+         .catch(error);
       } else if (e.target.classList.contains("change")) {
         var children = document.getElementById("container").children;
         var childArray = [];
@@ -137,21 +133,15 @@ function listenForClicks() {
         });
 
         browser.tabs.query({active: true, currentWindow: true})
-         .then(change)
+         .then(modify)
          .catch(error);
       }
-    } catch(err) {}
+    } catch(err) { /* Shove it up yer butt */ }
 
-    // Sends a "reset" message to the content script in the active tab.
-    function reset(tabs) {
+    // Sends a "modify" message to the content script in the active tab.
+    function modify(tabs) {
       browser.tabs.sendMessage(tabs[0].id, {
-        command: "reset",
-      });
-    }
-
-    function change(tabs) {
-      browser.tabs.sendMessage(tabs[0].id, {
-        command: "change",
+        command: "modify",
       });
     }
   });
