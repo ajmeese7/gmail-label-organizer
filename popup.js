@@ -125,9 +125,6 @@ function listenForClicks() {
           childArray.push(parseInt(id));
         }
 
-        console.log("Order:");
-        console.log(childArray);
-
         browser.storage.sync.set({
           order: childArray
         });
