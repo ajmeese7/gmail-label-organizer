@@ -1,6 +1,6 @@
 html, body {
   width: 350px;
-  background-color: white;
+  background-color: #f8f8ff;
 }
 
 .hidden {
@@ -12,12 +12,23 @@ html, body {
 }
 
 .dragDiv {
-  width: 75px;
+  width: 99%;
   height: 45px;
   padding: 10px;
+  margin-top: 2.5px;
   border: 1px solid black;
   vertical-align: middle;
   line-height: 1;
+  border-radius: 15px;
+  background-color: #fffff0;
+}
+
+.dragP {
+  font: bold 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0px;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 5px;
 }
 
 .button {
@@ -30,18 +41,19 @@ html, body {
   display: inline-block;
 }
 
-.change:hover {
-  background-color: #CFF2F2;
+/* TODO: Find better colors for these */
+.change {
+  background-color: #00b8e6;
 }
 
-.change {
-  background-color: #E5F2F2;
+.change:hover {
+  background-color: #00ccff;
 }
 
 .reset {
-  background-color: #FBFBC9;
+  background-color: #e60000;
 }
 
 .reset:hover {
-  background-color: #EAEA9D;
+  background-color: #ff0000;
 }
