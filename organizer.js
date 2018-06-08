@@ -2,10 +2,13 @@ labels();
 
 function labels() {
   var systemLabels = document.getElementsByClassName("TK")[0];
+  var children = systemLabels.children;
+  var childrenIDs = children[0].id;
   if (typeof systemLabels != 'undefined') {
-    var children = systemLabels.children;
-    for (var i = 0; i < children.length; i++) {
-      children[i].id = i + 1;
+    if (childrenIDs == "") {
+      for (var i = 0; i < children.length; i++) {
+        children[i].id = i + 1;
+      }
     }
 
     // This portion is a slightly modified version of modifyPage() in contentScript.js
@@ -22,6 +25,8 @@ function labels() {
       systemLabels.innerHTML = null;
       systemLabels.appendChild(elements);
     });
+
+    setTimeout(labels, 5000);
   } else {
     // Calls until the content is loaded
     setTimeout(labels, 100);

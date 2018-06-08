@@ -1,8 +1,7 @@
 (function() {
   // Running on page
   function modifyPage() {
-    // TODO: Make it refresh when innerHTML is modified (i.e. an email is deleted and the # is changed)
-    //       so the new order is restored (also somehow destroys IDs)
+    // IDEA: Make it refresh when innerHTML is modified?
 
     var storageItem = browser.storage.sync.get('order');
     storageItem.then((res) => {
@@ -15,8 +14,6 @@
       	elements.appendChild(document.getElementById(number + "").cloneNode(true));
       });
 
-      // IDEA: Run this portion of the code again when the innerHTML is modified by Gmail itself (^^top).
-      //       Also, re-implement the IDs by running organizer.js setIDs() again
       wrapper.innerHTML = null;
       wrapper.appendChild(elements);
     });
