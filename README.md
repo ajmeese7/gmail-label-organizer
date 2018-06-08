@@ -18,7 +18,8 @@ This will get you set up to easily test changes to the code. Simply click `Reloa
 on the extension container to refresh the extension and see any changes.
 
 ### Plans
-- Make it refresh when innerHTML is modified (i.e. an email is deleted and the #
-  is changed) so the new order is restored (also somehow destroys IDs)
+- Sometimes when you receive a new email everything gets screwed up. If anyone
+  can figure this out, I would greatly appreciate it. Please report any unusual
+  behavior on the issues page
 - Carry over code to Chrome extension
 - Test extension on other versions of Firefox
