@@ -8,7 +8,6 @@
     storageItem.then((res) => {
       var arr = res.order;
       var wrapper = document.getElementsByClassName("TK")[0];
-      var children = wrapper.children;
       var elements = document.createDocumentFragment();
 
       arr.forEach(function(number) {
