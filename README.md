@@ -19,3 +19,4 @@ on the extension container to refresh the extension and see any changes.
   can figure this out, I would greatly appreciate it. Please report any unusual
   behavior on the issues page
 - Carry over code to Chrome extension
+- Make application adapt to user settings on which labels are shown (currently assumes all 6 labels are shown)
