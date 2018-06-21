@@ -1,9 +1,0 @@
-{
-  "name": "labelOrder",
-  "description": "ignored",
-  "type": "storage",
-  "data":
-  {
-    "order": "the default Gmail label order"
-  }
-}

@@ -3,7 +3,7 @@ labels();
 function labels() {
   var systemLabels = document.getElementsByClassName("TK")[0];
   var children = systemLabels.children;
-  var childrenIDs = children[0].id;
+  var childrenIDs = children[children.length - 1].id;
   if (typeof systemLabels != 'undefined') {
     if (childrenIDs == "") {
       for (var i = 0; i < children.length; i++) {
@@ -19,7 +19,10 @@ function labels() {
       var elements = document.createDocumentFragment();
 
       arr.forEach(function(number) {
-      	elements.appendChild(document.getElementById(number + "").cloneNode(true));
+        // Works for document, but not popup
+        if (document.getElementById(number + "") != null) {
+          elements.appendChild(document.getElementById(number + "").cloneNode(true));
+        }
       });
 
       systemLabels.innerHTML = null;

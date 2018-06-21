@@ -10,8 +10,10 @@
       var elements = document.createDocumentFragment();
 
       arr.forEach(function(number) {
-        // Modify elements to modify page
-      	elements.appendChild(document.getElementById(number + "").cloneNode(true));
+        // Maybe this workaround will help solve the probem?
+        if (document.getElementById(number + "") != null) {
+      	  elements.appendChild(document.getElementById(number + "").cloneNode(true));
+        }
       });
 
       wrapper.innerHTML = null;

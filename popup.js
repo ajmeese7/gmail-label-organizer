@@ -9,6 +9,8 @@ function logTabs(tabs) {
   let tab = tabs[0];
   var title = tab.title;
   // Definitely not a perfect system, as it will run on any page with Gmail in the title
+  // IDEA: Use https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs? Need to
+  //       check if link is different under different circumstances (dissect parameters!)
   if (title.includes("Gmail")) {
     document.querySelector("#not-gmail").classList.add("hidden");
     document.querySelector("#popup-content").classList.remove("hidden");
@@ -29,9 +31,8 @@ function setContent(local) {
   if (typeof local.arrangement != 'undefined') {
     // Sets the popup content to contain user-configured arrangement
     document.getElementById("container").innerHTML = local.arrangement;
-  } else {
-    console.log("Local item `arrangement` not yet set!");
   }
+
   setDivListeners();
   setPListeners();
 }
@@ -51,6 +52,7 @@ var divDropFunction = function(ev) {
   srcParent.appendChild(tgt);
 
   // Sets local storage with current arrangement to save it for when the popup is reopened
+  // TODO: Replace with JS function that works same as new reset (no innerHTML!)
   browser.storage.local.set({
     arrangement: document.getElementById("container").innerHTML
   });
@@ -88,6 +90,7 @@ function listenForClicks() {
 
     // Running in popup
     try {
+      // TODO: Get new order based on document contents when clicked (in case user removed some labels)
       if (e.target.classList.contains("reset")) {
         var labels = document.getElementsByClassName("dragP"); // From HTMLCollection to Array
         var arr = Array.prototype.slice.call(labels);
@@ -149,6 +152,8 @@ function listenForClicks() {
  * Display the popup's error message, and hide the normal UI.
  */
 function reportExecuteScriptError(error) {
+  // IDEA: Remove most of this part and just show te default #error-content text?
+  //       The user likely doesn't need to see that information
   document.querySelector("#popup-content").classList.add("hidden");
   document.querySelector("#not-gmail").classList.add("hidden");
   document.querySelector("#error-content").classList.remove("hidden");
@@ -161,7 +166,6 @@ function reportExecuteScriptError(error) {
 /**
  * When the popup loads, inject a content script into the active tab,
  * and add a click handler.
- * If we couldn't inject the script, handle the error.
  */
 browser.tabs.executeScript({file: "contentScript.js"})
 .then(listenForClicks)
