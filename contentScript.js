@@ -10,7 +10,7 @@
       var elements = document.createDocumentFragment();
 
       arr.forEach(function(number) {
-        // Maybe this workaround will help solve the probem?
+        // Works for document, but not popup
         if (document.getElementById(number + "") != null) {
       	  elements.appendChild(document.getElementById(number + "").cloneNode(true));
         }
