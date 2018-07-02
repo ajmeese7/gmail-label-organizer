@@ -25,13 +25,44 @@ browser.tabs.query({currentWindow: true, active: true}).then(logTabs, error);
 //////////////////////////////////////////////////////////////
 
 // Called every time popup is opened; sets listeners
-browser.storage.local.get('arrangement').then(setContent, error);
+browser.storage.local.get('existingLabels').then(setContent, error);
 
+// TODO: Decide logic of setting arrangement while maintaining previous order
 function setContent(local) {
-  if (typeof local.arrangement != 'undefined') {
-    // Sets the popup content to contain user-configured arrangement
-    document.getElementById("container").innerHTML = local.arrangement;
+  var container = document.getElementById("container");
+  container.innerHTML = "";
+  for (var i = 1; i <= local.existingLabels.length; i++) {
+    container.innerHTML += "<p id='" + i + "' class='dragP' draggable='true'>" + local.existingLabels[i - 1] + "</p>";
   }
+
+  // Sets the popup content to contain user-configured arrangement
+  // NOTE: Now this won't save non-changed user settings when closed (new functionality, not bug?)
+  var storageItem = browser.storage.sync.get('order');
+  storageItem.then((res) => {
+    var arr = res.order;
+    var elements = document.createDocumentFragment();
+
+    arr.forEach(function(number) {
+      if (document.getElementById(number + "") != null) {
+    	  elements.appendChild(document.getElementById(number + "").cloneNode(true));
+      }
+    });
+
+    container.innerHTML = null;
+    container.appendChild(elements);
+
+    //var labels = document.getElementsByClassName("dragP");
+    for (var i = 1; i <= local.existingLabels.length; i++) {
+      var div = document.createElement("div");
+      div.setAttribute("class", "dragDiv");
+      var p = document.getElementById(i + "");
+      container.replaceChild(div, p);
+      div.appendChild(p);
+
+      setDivListeners();
+      setPListeners();
+    }
+  });
 
   setDivListeners();
   setPListeners();
@@ -50,12 +81,6 @@ var divDropFunction = function(ev) {
 
   ev.currentTarget.replaceChild(src, tgt);
   srcParent.appendChild(tgt);
-
-  // Sets local storage with current arrangement to save it for when the popup is reopened
-  // TODO: Replace with JS function that works same as new reset (no innerHTML!)
-  browser.storage.local.set({
-    arrangement: document.getElementById("container").innerHTML
-  });
 }
 
 function setDivListeners() {
@@ -90,31 +115,30 @@ function listenForClicks() {
 
     // Running in popup
     try {
-      // TODO: Get new order based on document contents when clicked (in case user removed some labels)
       if (e.target.classList.contains("reset")) {
-        var labels = document.getElementsByClassName("dragP"); // From HTMLCollection to Array
+        // IDEA: Iterate over `.TK` scanning for labels and remove from `arr` if they don't appear
+        var labels = document.getElementsByClassName("dragP"); // From HTMLCollection (here) to Array (next line)
         var arr = Array.prototype.slice.call(labels);
+
+        // Sorts the labels in increasing order of ID (1,2,3...)
         labels = arr.sort(function(a, b) {
           return a.id.localeCompare(b.id);
         });
 
         var divGroup = document.getElementsByClassName("dragDiv");
         var divs = Array.prototype.slice.call(divGroup);
+        var order = [];
         for (var i = 0; i < divs.length; i++) {
-          // TODO: Look for a way to simply paste the object, not this complicated mess.
-          //       The labels[] themselves are the correct objects
           divs[i].innerHTML = "<p id='" + (i+1) + "' class='dragP' draggable='true'>" + labels[i].textContent + "</p>";
+          order.push(i + 1); // Depends on the correct number of dragDivs being displayed (in relation to actual Gmail page)
         }
 
         setDivListeners();
         setPListeners();
 
+        // Would be [1,2,3,4,5,6] if 6 system labels were visible
         browser.storage.sync.set({
-          order: [1, 2, 3, 4, 5, 6]
-        });
-
-        browser.storage.local.set({
-          arrangement: document.getElementById("container").innerHTML
+          order: order
         });
 
         browser.tabs.query({active: true, currentWindow: true})
@@ -127,6 +151,9 @@ function listenForClicks() {
           var id = children[i].children[0].id;
           childArray.push(parseInt(id));
         }
+
+        setDivListeners();
+        setPListeners();
 
         browser.storage.sync.set({
           order: childArray
