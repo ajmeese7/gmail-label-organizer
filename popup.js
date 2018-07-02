@@ -58,10 +58,12 @@ function setContent(local) {
       var p = document.getElementById(i + "");
       container.replaceChild(div, p);
       div.appendChild(p);
+
+      setDivListeners();
+      setPListeners();
     }
   });
 
-  // NOTE: EVERYTHING FIXED! Except now the p's aren't draggable
   setDivListeners();
   setPListeners();
 }
@@ -149,6 +151,9 @@ function listenForClicks() {
           var id = children[i].children[0].id;
           childArray.push(parseInt(id));
         }
+
+        setDivListeners();
+        setPListeners();
 
         browser.storage.sync.set({
           order: childArray
