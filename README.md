@@ -1,6 +1,10 @@
 # gmail-label-organizer
 Allows users to reorganize the Gmail system labels, i.e. to put the 'Important' label above 'Inbox'.
 
+Please note that this extension is now practically obsolete due to the forced update of Gmail.
+I have no immediate plans to update this extension to adapt to these changes, especially because 
+it seems like the type of feature that Google will eventually add for power users.
+
 **This extension is now on the Firefox store!** Go give it a try and a review [here](https://addons.mozilla.org/addon/gmail-label-organizer/).
 
 ### Developing
